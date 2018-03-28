@@ -20,7 +20,7 @@ class SongsController < ApplicationController
         redirect_to artist_songs_path(@artist), alert: "Song not found"
       end
     else
-      @song = Song.find(params[:id])
+      set_song
     end
   end
 
@@ -52,12 +52,12 @@ class SongsController < ApplicationController
         redirect_to artist_songs_path(artist), alert: "Song not found." if @song.nil?
       end
     else
-      @song = Song.find(params[:id])
+      set_song
     end
   end
 
   def update
-    @song = Song.find(params[:id])
+    set_song
 
     @song.update(song_params)
 
@@ -69,7 +69,7 @@ class SongsController < ApplicationController
   end
 
   def destroy
-    @song = Song.find(params[:id])
+    set_song
     @song.destroy
     flash[:notice] = "Song deleted."
     redirect_to songs_path
@@ -77,6 +77,10 @@ class SongsController < ApplicationController
 
   private
 
+  def set_song
+    @song = Song.find(params[:id])
+  end
+  
   def song_params
     params.require(:song).permit(:title, :artist_name, :artist_id)
   end
